@@ -41,7 +41,7 @@ class SentenceEntropyProcessor(BaseProcessor):
             mean_sentence_entropy = torch.mean(sentence_entropy,dim=0).squeeze()
             if self.avg_head == False:
                 mean_sentence_entropy = torch.mean(mean_sentence_entropy,dim=0).squeeze()
-        return mean_sentence_entropy.tolist()
+        return torch.mean(mean_sentence_entropy[1:])
 
     def append_data_to_csv(self, data):
         with open(self.save_file, 'a', newline='') as csvfile:
