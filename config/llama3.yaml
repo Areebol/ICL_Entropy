@@ -1,0 +1,6 @@
+model_familys:
+- llama_3
+data_loaders:
+- CotLoader
+- HC3HumanLoader
+- XsumLoader
