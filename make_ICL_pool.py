@@ -14,6 +14,7 @@ from utils.load_config import load_config
 from utils.load_model import load_model_tokenizer
 from utils.process_data import get_model_generate
 from data_processor.token_entropy_processor import SoftMaxTokenEntropyProcessor
+from data_processor.sentence_entropy_processor import SoftMaxSentenceEntropyProcessor
 from data_loader.poem_sentiment_loader import SentimentClassificationLoader
 
 if __name__ == "__main__":
@@ -40,17 +41,19 @@ if __name__ == "__main__":
     
     ICL_pool = list()
     
-    data_processor = SoftMaxTokenEntropyProcessor(model,tokenizer,model_config)
+    token_data_processor = SoftMaxTokenEntropyProcessor(model,tokenizer,model_config)
+    sentence_data_processor = SoftMaxSentenceEntropyProcessor(model,tokenizer,model_config)
     
     for i, ICL_example in enumerate(ICL_examples):
         print(f"[example:{i}/{len(ICL_examples)}]:{ICL_example}")
         
         # pre process
         model_generate = get_model_generate(tokenizer,model,ICL_example,max_new_tokens=1)
-        processed_data = data_processor.process_data(0, ICL_example, model_generate)
+        token_entropy = token_data_processor.process_data(0, ICL_example, model_generate)
+        sentence_entropy = sentence_data_processor.process_data(0, ICL_example, model_generate,split_words=data_loader.get_split_words())
         # 计算熵值
-        ICL_pool.append({"ICL":ICL_example,"token_entropy":processed_data})
+        ICL_pool.append({"ICL":ICL_example,"token_entropy":token_entropy,"sentence_entropy":sentence_entropy})
         
     # 保存为json文件
     dataset = Dataset.from_list(ICL_pool)
-    dataset.to_json("./tmp.json")
+    dataset.to_json("./llama2_7b_poem.json")

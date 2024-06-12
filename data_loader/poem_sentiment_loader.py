@@ -56,6 +56,9 @@ class SentimentClassificationLoader():
         ICL_test_datas = [f"{instruct}\n{ICL_demo}\nText: {d['verse_text'].strip().replace("\\n", " ")}\nSentiment:" for d in self.test_data]
         labels = [self.label[d["label"]] for d in self.test_data]
         return ICL_test_datas,labels
+   
+    def get_split_words(self):
+        return ["\n"]
     
 if __name__ == "__main__":
     dataset = SentimentClassificationLoader()
