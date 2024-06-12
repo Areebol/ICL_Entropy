@@ -44,6 +44,8 @@ class SentimentClassificationLoader():
             " ".join([example for example in perm]) 
             for perm in ICL_examples
         ]
+        
+        return ICL_examples
 
     def get_ICL_test_data(self,ICL:str=None):
         """
