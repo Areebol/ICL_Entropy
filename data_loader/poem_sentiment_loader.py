@@ -17,10 +17,11 @@ class SentimentClassificationLoader():
             #3:"mixed", # there is no `mixed` on the test set
         }
         self.train_data = [line for line in dataset['train']]
-
-        self.ICL0 = [f"Text:{d['verse_text'].strip().replace("\\n", " ")} Sentiment:{self.label[d['label']]}" for d in self.train_data if d['label']==0]
-        self.ICL1 = [f"Text:{d['verse_text'].strip().replace("\\n", " ")} Sentiment:{self.label[d['label']]}" for d in self.train_data if d['label']==1]
-        self.ICL2 = [f"Text:{d['verse_text'].strip().replace("\\n", " ")} Sentiment:{self.label[d['label']]}" for d in self.train_data if d['label']==2]
+        self.test_data = [line for line in dataset['test']]
+        
+        self.ICL0 = [f"Text:{d['verse_text'].strip().replace("\\n", " ")}\nSentiment:{self.label[d['label']]}" for d in self.train_data if d['label']==0]
+        self.ICL1 = [f"Text:{d['verse_text'].strip().replace("\\n", " ")}\nSentiment:{self.label[d['label']]}" for d in self.train_data if d['label']==1]
+        self.ICL2 = [f"Text:{d['verse_text'].strip().replace("\\n", " ")}\nSentiment:{self.label[d['label']]}" for d in self.train_data if d['label']==2]
     
     def get_ICL_examples(self,num_sample:int=3,num_example:int=20,seed:int=42):
         """
@@ -41,17 +42,20 @@ class SentimentClassificationLoader():
         
         # 拼接得到ICL examples
         ICL_examples = [
-            " ".join([example for example in perm]) 
+            "\n".join([example for example in perm]) 
             for perm in ICL_examples
         ]
         
         return ICL_examples
 
-    def get_ICL_test_data(self,ICL:str=None):
+    def get_ICL_test_datas(self,ICL_demo:str=None):
         """
         ICL：ICL示例部分
         """
-        ...
+        instruct: str = 'Classify the text into no_impact, negative, or positive'
+        ICL_test_datas = [f"{instruct}\n{ICL_demo}\nText: {d['verse_text'].strip().replace("\\n", " ")}\nSentiment:" for d in self.test_data]
+        labels = [self.label[d["label"]] for d in self.test_data]
+        return ICL_test_datas,labels
     
 if __name__ == "__main__":
     dataset = SentimentClassificationLoader()

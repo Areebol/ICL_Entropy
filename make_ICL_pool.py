@@ -36,9 +36,9 @@ if __name__ == "__main__":
     model,tokenizer = load_model_tokenizer(model_config)
     
     data_loader = SentimentClassificationLoader()
-    ICL_examples = data_loader.get_ICL_examples();
+    ICL_examples = data_loader.get_ICL_examples()
     
-    ICL_pool = list();
+    ICL_pool = list()
     
     data_processor = SoftMaxTokenEntropyProcessor(model,tokenizer,model_config)
     
