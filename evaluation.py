@@ -19,6 +19,7 @@ from utils.load_model import load_model_tokenizer
 from utils.process_data import get_model_generate
 from data_processor.token_entropy_processor import SoftMaxTokenEntropyProcessor
 from data_loader.poem_sentiment_loader import SentimentClassificationLoader
+from data_loader.sst2_loader import SST2Loader
 from utils.meter import AverageMeter
 import random
 import numpy as np
@@ -35,7 +36,7 @@ if __name__ == "__main__":
     parser.add_argument("--cfg", default="./config/llama2.yaml", help="config file path")
     parser.add_argument("--start", default = 0, type=int, help="config file path")
     parser.add_argument("--model_cfg", default="./config/models_jq.yaml", help="model config file path")
-    parser.add_argument("--ICL", default="llama2_7b_poem", help="ICL dataset")
+    parser.add_argument("--ICL", default="llama2_7b_sst2", help="ICL dataset")
     args = parser.parse_args()
     
     # load config 
@@ -52,7 +53,8 @@ if __name__ == "__main__":
     print(model_config[0])
     model,tokenizer = load_model_tokenizer(model_config)
     
-    data_loader = SentimentClassificationLoader()
+    # data_loader = SentimentClassificationLoader()
+    data_loader = SST2Loader()
     # 读取数据集
     ICL_pool = load_dataset('json', data_files=f"./{args.ICL}.json",split="train")
 
