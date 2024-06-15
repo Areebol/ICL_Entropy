@@ -15,8 +15,7 @@ from utils.load_model import load_model_tokenizer
 from utils.process_data import get_model_generate
 from data_processor.token_entropy_processor import SoftMaxTokenEntropyProcessor
 from data_processor.sentence_entropy_processor import SoftMaxSentenceEntropyProcessor
-from data_loader.poem_sentiment_loader import SentimentClassificationLoader
-from data_loader.sst2_loader import SST2Loader
+from data_loader import *
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -38,7 +37,8 @@ if __name__ == "__main__":
     model,tokenizer = load_model_tokenizer(model_config)
     
     # data_loader = SentimentClassificationLoader()
-    data_loader = SST2Loader()
+    # data_loader = SST2Loader()
+    data_loader = TRECLoader()
     ICL_examples = data_loader.get_ICL_examples()
     
     ICL_pool = list()
@@ -58,4 +58,4 @@ if __name__ == "__main__":
         
     # 保存为json文件
     dataset = Dataset.from_list(ICL_pool)
-    dataset.to_json("./llama2_7b_sst2.json")
+    dataset.to_json("./exp/llama2_7b_trec.json")

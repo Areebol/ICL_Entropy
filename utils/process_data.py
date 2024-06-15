@@ -49,7 +49,7 @@ def get_attention_entropy(attn_matrix,soft_max=True,avg_head=False):
             for i in range(attn_matrix.shape[-1]):
                 for j in range(attn_matrix.shape[-1]):
                     if j > i:  # j > i 表示在上三角部分
-                        attn_matrix[:, :, i, j] = float("-inf")
+                        attn_matrix[:, i, j] = float("-inf")
             # 归一化
             attn_matrix = nn.functional.softmax(attn_matrix, dim=-1, dtype=torch.float32)
         if avg_head:
